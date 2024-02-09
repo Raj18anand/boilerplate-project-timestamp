@@ -24,9 +24,16 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/:date", function (req, res) {
+app.get("/api/:date?", function (req, res) {
   const param=req.params.date;
-  if(param.includes("-")){
+  console.log("mylog", param)
+  if(param===undefined){
+    const date=new Date();
+    const unix=date.getTime();
+    const utc=date.toUTCString();
+    return res.json({unix:unix,utc:utc});
+  }
+  if(param.includes("-")|| param.includes(" ")){
     const date=new Date(param);
     console.log(date);
     if(date.toString()=="Invalid Date"){
@@ -46,10 +53,6 @@ app.get("/api/:date", function (req, res) {
   }
 });
 
-app.get("/api/", function (req, res) {
-  const date= new Date();
-  return res.json({unix:date.getTime(),utc:date.toUTCString()})
-});
 
 
 // listen for requests :)
